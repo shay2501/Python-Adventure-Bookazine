@@ -1,0 +1,13 @@
+
+{"adventure":{
+  "Kingdom": "ShayLand"
+  ,"NPCNames":[
+    "Roger"
+    ,"Lisa"
+    ,"Dennis"
+    ,"Ockman"
+  ]
+  ,"StartingPlace": "You are in your bedroom when you hear a loud noise. You look up to see a door in the wall of your closet that you have never seen before"
+
+  }
+}

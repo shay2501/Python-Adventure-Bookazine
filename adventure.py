@@ -3,6 +3,7 @@ __author__ = 'Les Pounder'
 #The lines below imagicptsort modules of code into our game, in particular these imagicptsort time functions to allow us to pause and stop the game, and random provides a method of choosing random numbers or characters.
 from time import *
 from random import *
+import json
 import os,sys
 
 #This is a function, we use it to do lots of things and then call it by it's name later on
@@ -53,8 +54,14 @@ def setup():
     global name
     global hitpts
     global magicpts
+    global datastore
     #Our variable "name" is used to store our name, captured by keyboard input.
     name = input("What is your name warrior? ")
+    #open the adventure json database and read it into the datastore variable
+    filename = "adventureDB.txt"
+    if filename:
+        with open(filename, 'r') as database:
+            datastore = json.load(database)
     #randint is a great way of adding some variety to your players statistics.
     hitpts = randint(5,20)
     magicpts = randint(5,20)
@@ -101,7 +108,8 @@ global hitpts
 global magicpts
 global move
 global enemyhitpts
-print ("Welcome to the land of Narule, " + name)
+global datastore
+print ("Welcome to the land of " + datastore["adventure"]["Kingdom"] + ", "  + name)
 #Sleep is Python's way of pausing the game for a specified number of seconds
 sleep(2)
 #Below we are using the helper functions to join a string of text to an integer via the str() helper.

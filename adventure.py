@@ -39,15 +39,33 @@ def castle():
     print ("                 ||: . ||: ,   +++++++ .  .  ||:   |        *")
     print ("                 ||: . ||: ,   +++++++ .  .  ||:   |")
 
-def north():
-    print ("To go north press n then enter")
-def east():
-    print ("To go east press e then enter")
-def south():
-    print ("to go south press s then enter")
-def west():
-    print ("To go west press w then enter")
 
+def choose_direction():
+    global move
+    print ("To go north press n then enter")
+    print ("To go east press e then enter")
+    print ("To go west press w then enter")
+    move = input("Which direction would you like to travel? ")
+    if move == 'n':
+        print (datastore["adventure"]["North"])
+    #elif is short for Else If and it means that if the previous condition is false, to check this condition to see if that is true.
+    elif move == 'e':
+        print (datastore["adventure"]["East"])
+    elif move == 'w':
+        print (datastore["adventure"]["West"])
+def carry_on():
+    global hitpts
+    global magicpts
+    carryon = True
+
+    if hitpts <= 0:
+        carryon = False
+        print("I am sorry hero, but all your health is spent!\nRest up and try again another time\n")
+    elif len(datastore["adventure"]["NPCNames"]) == 0 and len(datastore["adventure"]["Enemies"]) == 0:
+        carryon = False
+        print("You have faced all your enemies, encountered all your friends, and lived to tell the tale!")
+        print(name + ", you are the bravest hero in all of " + datastore["adventure"]["Kingdom"] + "!!!")
+    return carryon
 
 def setup():
     #global is used to create variables that can be used throughout our game
@@ -56,7 +74,7 @@ def setup():
     global magicpts
     global datastore
     #Our variable "name" is used to store our name, captured by keyboard input.
-    name = input("What is your name warrior? ")
+    name = input("What is your name hero? ")
     #open the adventure json database and read it into the datastore variable
     filename = "adventureDB.txt"
     if filename:
@@ -66,21 +84,21 @@ def setup():
     hitpts = randint(5,20)
     magicpts = randint(5,20)
 
-def villager():
-    #This will create a randomly named Villager to interact with
+def friend():
+    #This will create a randomly named Friend to interact with
     global npcname
     global response
     #Below is a list, we can store lots of things in a list and then retrieve them later.
-    responses = ["Hi", "Are you a hero?", "Are you from this village?", "There has been a dark shadow cast across the village"]
-    npcnamechoice = ["Roger", "Dexter", "Sarah", "Susan"]
+    responses = datastore["adventure"]["NPCResponses"]
+    npcnamechoice = datastore["adventure"]["NPCNames"]
     #Shuffle will shuffle the list contents into a random order.
     shuffle(npcnamechoice)
-    npcname = npcnamechoice[0]
-    print ("\n["+npcname+":] Hello, my name is "+npcname+", Would you like to talk to me?\n")
+    npcname = npcnamechoice.pop()
+    print ("\n["+npcname+":] Hello, my name is "+npcname+", Would you like some advice?\n")
     shuffle(responses)
-    print ("Press y to talk to the villager")
+    print ("Press y to talk to " + npcname)
     if input() == "y":
-        print ("["+npcname+":] " +responses[0])
+        print ("["+npcname+":] " +responses.pop() + "\n")
     else:
         print("["+npcname+":] Goodbye")
 
@@ -91,12 +109,49 @@ def enemy():
     enemyhitpts = randint(5,20)
     enemymagicpts = randint(5,20)
     #Below is the enemy's name, perhaps you could change this to a list and then shuffle the list, such as we did for the villager above.
-    enemyname = "Ogre"
-    print ("\nSuddenly you hear a roar, and from the shadows you see an "+enemyname+" coming straight at you....")
+    enemies = datastore["adventure"]["Enemies"]
+    shuffle(enemies)
+    enemyname = enemies.pop()
+    print("")
+    print ("Suddenly you hear a commotion, and from the shadows you see an "+enemyname+" coming straight at you....")
     #print enemyname
+    print("")
     print ("Your enemy has " + " " + str(enemyhitpts) + " " + "Health Points")
     print ("Your enemy has " + " " + str(enemymagicpts) + " " + "Magic Points")
+    print("")
 
+def fight_enemy():
+    global magicpts
+    global hitpts
+    global enemyname
+    global enemyhitpts
+    global enemymagicpts
+
+    #The hero takes damage from the enemy but also causes damage, if she brought her sword
+    hit = randint(0,magicpts)
+    print ("You swing your sword and cause " + str(hit) + " of damage")
+    enemyhitpts = enemyhitpts - hit
+    print("Your enemy's hitpts = " + str(enemyhitpts))
+    enemyhit = randint(0,enemymagicpts)
+    print ("The " + enemyname + " swings a weapon at you and causes " + str(enemyhit) + " of damage")
+    hitpts = hitpts - enemyhit
+    print ("Your hitpts = " + str(hitpts))
+
+def run_away():
+    global enemyname
+    global enemymagicpts
+
+    print ("You turn and run away from the " + enemyname)
+    #the hero suffers damage if caught
+    suffer = randint(0, 100)%2
+    if suffer == 0:
+        print("You escaped the clutches of the " + enemyname + "!")
+    else:
+        enemyhit = randint(0,enemymagicpts)
+        print("You are caught by the enemy and suffer " + enemyhit + " points of damage")
+        hitpts = hitpts - enemyhit
+
+    print ("Your hitpts = " + hitpts)
 
 #We now use our functions in the game code, we call the title, the castle picture and then ask the game to run the setup for our character.
 clear_screen()
@@ -115,69 +170,57 @@ sleep(2)
 #Below we are using the helper functions to join a string of text to an integer via the str() helper.
 print ("\nYour health is" + " " + str(hitpts))
 print ("Your magic skill is" + " " + str(magicpts))
+sleep(2)
+print ("")
+print (datastore["adventure"]["StartingPlace"])
 
-
-
-print ("Would you like to venture out into the land? Press y then enter to continue")
+print ("")
 #Below we use input to ask for user input, and if it is equal to y, then the code underneath is run.
 if input() == "y":
-    print ("You are in your home, with a roaring fireplace in front of you, above the fire you can see your sword and shield")
-    print ("Would you like to take your sword and shield? Press y then enter to continue")
+
+    print ("Would you like to take your sword and shield?\nPress y then enter to continue")
     if input() == "y":
         #This is a list, and it can store many items, and to do that we "append" items to the list.
         weapons = []
         weapons.append("sword")
         weapons.append("shield")
         print ("You are now carrying your " + weapons[0] + " and your" + " " + weapons[1])
-        print ("Armed with your " + weapons[0] + " and " + weapons[1] + " you swing open the door to your home and see a green valley gleaming in the sunshine.")
     else:
         print ("You choose not to take your weapons")
-        print ("Armed with your sense of humour, You swing open the door to see a green valley full of opportunity awaiting you.")
+    print ("You are ready to venture out into the land!")
 else:
-    print ("You stay at home, sat in your favourite chair watching the fire grow colder. The land of Narule no longer has a hero.")
+    print ("Nothing ventured, nothing gained!\nThe land of " + datastore["adventure"]["Kingdom"] + " is missing a hero.")
     print ("Game Over")
     sys.exit(0)
 
-print ("In the distance to the north you can see a small village, to the east you can see a river and to the west a field of wild flowers.")
+print (datastore["adventure"]["Destinations"])
 
-#Remember those functions we created at the start of the code? Well here we are using them in the game.
+#prompt the hero for a direction
 print ("\n")
-north()
-east()
-west()
-move = input("Where would you like to go? ")
-if move == 'n':
-    print ("\nYou move to the north, walking in the sunshine.")
-    print ("A villager is in your path and greets you")
-#elif is short for Else If and it means that if the previous condition is false, to check this condition to see if that is true.
-elif move == 'e':
-    print ("\nYou walk to the river which lies to the east of your home.")
-    print ("A villager is in your path and greets you")
-elif move == 'w':
-    print ("\nYou walk to the field of wild flowers, stopping to take in the beauty")
-    print ("A villager is in your path and greets you\n")
+choose_direction()
 
-villager()
-enemy()
-sleep(3)
+#main game loops until we are out of enemy's and friends, or out of places to go
+while carry_on():
+    print("You are walking on your journey when...")
+    #encounter a friend or enemy
+    encounter = randint(0, 100)%2
+    #if friend, choose to talk to them
+    if encounter == 0 and len(datastore["adventure"]["NPCNames"]) > 0:
+        print ("A friend is in your path and greets you\n")
+        friend()
 
-fight = input("Do you wish to fight?" )
+    #if enemy choose to fight or run
+    elif len(datastore["adventure"]["Enemies"])> 0:
+        enemy()
+        print("You have " + str(hitpts) + " Health Points and " + str(magicpts) + " Magic Points\n")
+        fight = input("Do you wish to fight?" )
 
-if fight == "y":
-    while hitpts > 0:
-#This loop will only work while our characters hitpts is greater than 0.
-        hit = randint(0,5)
-        print ("You swing your sword and cause " + str(hit) + " of damage")
-        enemyhitpts = enemyhitpts - hit
-        print(enemyhitpts)
-        enemyhit = randint(0,5)
-        print ("The ogre swings a club at you and causes " + str(enemyhit) + " of damage")
-        hitpts = hitpts - enemyhit
-        print (hitpts)
-else:
-    print ("You turn and run away from the ogre")
+        if fight == "y":
+            fight_enemy()
+        else:
+            run_away()
 
-print ("This is where this temagicptslate ends, this is now YOUR world, build your adventure and share it with the world")
+    sleep(3)
 
 print ("   _       _                 _")
 print ("  /_\   __| |_   _____ _ __ | |_ _   _ _ __ ___")

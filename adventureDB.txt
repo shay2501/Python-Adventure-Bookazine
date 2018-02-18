@@ -7,6 +7,24 @@
     ,"Dennis"
     ,"Ockman"
   ]
-  ,"StartingPlace": "You are in your bedroom when you hear a loud noise. You look up to see a door in the wall of your closet that you have never seen before"
+  , "NPCResponses": [
+    "It's a lovely day, would be lovely to go to the market."
+    , "I hear there are monsters afoot!"
+    , "The castle in the distance is haunted, beware of evil spells."
+    , "There are gray clouds looming in the horizon."
+  ]
+  , "Enemies":[
+     "Ogre"
+    , "Giant"
+    , "Shadow Walker"
+    , "Serpent"
+    , "Giant Shrew"
+    , "Gnarly Wolf"
+  ]
+  ,"StartingPlace": "You are in your bedroom when you hear a loud noise. You look up to see a door in the wall of your closet that you have never seen before.\nWould you like to venture through the door?\nPress y then enter to continue"
+  ,"Destinations": "In the distance to the north you can see a small village, to the east you can see a river and to the west a field of wild flowers."
+  , "North": "You move to the north, walking in the sunshine."
+  , "East": "You walk to the river which lies to the east of your home."
+  , "West": "You walk to the field of wild flowers, stopping to take in the beauty"
   }
 }

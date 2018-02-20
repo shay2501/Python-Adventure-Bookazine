@@ -140,6 +140,7 @@ def fight_enemy():
 def run_away():
     global enemyname
     global enemymagicpts
+    global hitpts
 
     print ("You turn and run away from the " + enemyname)
     #the hero suffers damage if caught
@@ -148,10 +149,10 @@ def run_away():
         print("You escaped the clutches of the " + enemyname + "!")
     else:
         enemyhit = randint(0,enemymagicpts)
-        print("You are caught by the enemy and suffer " + enemyhit + " points of damage")
+        print("You are caught by the enemy and suffer " + str(enemyhit) + " points of damage")
         hitpts = hitpts - enemyhit
 
-    print ("Your hitpts = " + hitpts)
+    print ("Your hitpts = " + str(hitpts))
 
 #We now use our functions in the game code, we call the title, the castle picture and then ask the game to run the setup for our character.
 clear_screen()

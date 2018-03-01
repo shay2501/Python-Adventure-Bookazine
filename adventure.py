@@ -53,17 +53,18 @@ def choose_direction():
         print (datastore["adventure"]["East"])
     elif move == 'w':
         print (datastore["adventure"]["West"])
+
 def carry_on():
     global hitpts
     global magicpts
-    carryon = True
+    global carryon
 
     if hitpts <= 0:
         carryon = False
         print("I am sorry hero, but all your health is spent!\nRest up and try again another time\n")
     elif len(datastore["adventure"]["NPCNames"]) == 0 and len(datastore["adventure"]["Enemies"]) == 0:
         carryon = False
-        print("You have faced all your enemies, encountered all your friends, and lived to tell the tale!")
+        print("You have battled all your enemies, encountered all your friends, faced all your trials, and lived to tell the tale!")
         print(name + ", you are the bravest hero in all of " + datastore["adventure"]["Kingdom"] + "!!!")
     return carryon
 
@@ -73,8 +74,10 @@ def setup():
     global hitpts
     global magicpts
     global datastore
+    global carryon
+
     #Our variable "name" is used to store our name, captured by keyboard input.
-    name = input("What is your name hero? ")
+    name = input("What is your name, hero? ")
     #open the adventure json database and read it into the datastore variable
     filename = "adventureDB.txt"
     if filename:
@@ -83,6 +86,7 @@ def setup():
     #randint is a great way of adding some variety to your players statistics.
     hitpts = randint(5,20)
     magicpts = randint(5,20)
+    carryon = True
 
 def friend():
     #This will create a randomly named Friend to interact with
@@ -99,8 +103,14 @@ def friend():
     print ("Press y to talk to " + npcname)
     if input() == "y":
         print ("["+npcname+":] " +responses.pop() + "\n")
+        bonus = randint(5,20)
+        print("Your friend gives you " + str(bonus) + " health points")
+        hitpts += bonus
+        print_stats()
+        print()
     else:
         print("["+npcname+":] Goodbye")
+        print()
 
 def enemy():
     global enemyhitpts
@@ -120,6 +130,28 @@ def enemy():
     print ("Your enemy has " + " " + str(enemymagicpts) + " " + "Magic Points")
     print("")
 
+def trial():
+    global carryon
+    global magicpts
+
+    print('Trial')
+    trials = datastore["adventure"]["Trials"]
+    trial = trials.pop()
+    print(trial["Trial"])
+    if input() == "y":
+        success = randint(0, 100)%2
+        if(success == 1):
+            print(trial["Success"])
+            print("You have gained " + str(trial["Magic"]) + " magic points for your trial.")
+            print()
+            magicpts = magicpts + trial["Magic"]
+            carryon = True
+            print_stats()
+        else:
+            print(trial["Failure"])
+            print()
+            carryon = bool(trial["Continue"])
+
 def fight_enemy():
     global magicpts
     global hitpts
@@ -135,7 +167,7 @@ def fight_enemy():
     enemyhit = randint(0,enemymagicpts)
     print ("The " + enemyname + " swings a weapon at you and causes " + str(enemyhit) + " of damage")
     hitpts = hitpts - enemyhit
-    print ("Your hitpts = " + str(hitpts))
+    print_stats()
 
 def run_away():
     global enemyname
@@ -152,7 +184,25 @@ def run_away():
         print("You are caught by the enemy and suffer " + str(enemyhit) + " points of damage")
         hitpts = hitpts - enemyhit
 
-    print ("Your hitpts = " + str(hitpts))
+    print_stats()
+
+def print_stats():
+    global magicpts
+    global hitpts
+    print("You now have " + str(hitpts) + " Health Points and " + str(magicpts) + " Magic Points\n")
+
+def game_over():
+    global carryon
+
+    carryon = False
+    print(" _____                        _____")
+    print("|  __ \                      |  _  | ")
+    print("| |  \/ __ _ _ __ ___   ___  | | | |_   _____ _ __ ")
+    print("| | __ / _` | '_ ` _ \ / _ \ | | | \ \ / / _ \ '__|")
+    print("| |_\ \ (_| | | | | | |  __/ \ \_/ /\ V /  __/ |   ")
+    print(" \____/\__,_|_| |_| |_|\___|  \___/  \_/ \___|_|   ")
+
+
 
 #We now use our functions in the game code, we call the title, the castle picture and then ask the game to run the setup for our character.
 clear_screen()
@@ -190,8 +240,8 @@ if input() == "y":
         print ("You choose not to take your weapons")
     print ("You are ready to venture out into the land!")
 else:
-    print ("Nothing ventured, nothing gained!\nThe land of " + datastore["adventure"]["Kingdom"] + " is missing a hero.")
-    print ("Game Over")
+    print ("\nNothing ventured, nothing gained!\nThe land of " + datastore["adventure"]["Kingdom"] + " is missing a hero.")
+    game_over()
     sys.exit(0)
 
 print (datastore["adventure"]["Destinations"])
@@ -202,18 +252,22 @@ choose_direction()
 
 #main game loops until we are out of enemy's and friends, or out of places to go
 while carry_on():
-    print("You are walking on your journey when...")
-    #encounter a friend or enemy
-    encounter = randint(0, 100)%2
+    print("**********   You are walking on your journey when...   **********")
+    #encounter a friend, quest, or enemy
+    encounter = randint(0, 100)%3
     #if friend, choose to talk to them
     if encounter == 0 and len(datastore["adventure"]["NPCNames"]) > 0:
         print ("A friend is in your path and greets you\n")
         friend()
 
+    elif encounter==1 and len(datastore["adventure"]["Trials"]) > 0:
+        #perform a Trial
+        trial()
+
     #if enemy choose to fight or run
     elif len(datastore["adventure"]["Enemies"])> 0:
         enemy()
-        print("You have " + str(hitpts) + " Health Points and " + str(magicpts) + " Magic Points\n")
+        print_stats()
         fight = input("Do you wish to fight?" )
 
         if fight == "y":
@@ -222,6 +276,11 @@ while carry_on():
             run_away()
 
     sleep(3)
+
+#we are at the end of the game
+print()
+game_over()
+print()
 
 print ("   _       _                 _")
 print ("  /_\   __| |_   _____ _ __ | |_ _   _ _ __ ___")

@@ -10,3 +10,8 @@ print(datastore["adventure"]["Kingdom"])
 print(datastore["adventure"]["StartingPlace"])
 for name in datastore["adventure"]["NPCNames"]:
      print(name)
+
+
+print("boolean")
+print(bool(0))
+print(bool(1))

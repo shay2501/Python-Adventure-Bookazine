@@ -2,13 +2,13 @@
 {"adventure":{
   "Kingdom": "Frost Rock"
   ,"NPCNames":[
-    "Roger"
-    ,"Lisa"
-    ,"Dennis"
-    ,"Ockman"
+    "Justina"
+    ,"Meena"
+    ,"Freya"
+    ,"Diana"
   ]
   , "NPCResponses": [
-    "It's a lovely day, would be lovely to go to the market."
+    "It's a lovely day, would be nice to go to the market."
     , "I hear there are monsters afoot!"
     , "The castle in the distance is haunted, beware of evil spells."
     , "There are gray clouds looming in the horizon."
@@ -16,10 +16,31 @@
   , "Enemies":[
      "Ogre"
     , "Giant"
-    , "Shadow Walker"
     , "Serpent"
-    , "Giant Shrew"
-    , "Gnarly Wolf"
+    , "Wolf"
+  ]
+  , "Trials": [
+      {
+        "Trial": "You come across a raging river. Type y to attempt to cross"
+        , "Success": "It was close, but you were able to make it across the river before being swept away!"
+        , "Failure":"You were unable to make it across to the river and got swept over a waterfall. You landed in a gnome village and never left!"
+        , "Magic":2
+        , "Continue": 0
+      }
+      ,{
+        "Trial": "There is a large treasure chest in your path. Type y break the lock to open it. "
+          , "Success": "The chest is full of the most delicious food! You feast for hours before continuing on your journey."
+          , "Failure":"The chest is full of dirty socks! When you open it the smell is so gross that you almost throw up!"
+          , "Magic":2
+          , "Continue": 1
+       }
+      ,{
+        "Trial": "You are walking through the forest when you think you hear the whinying of a horse. Type y to investigate."
+        , "Success": "The horse is really a beautiful unicorn! She is very friendly and lets you climb upon her back for a ride. She is faster than any horse could ever be and you feel like you are flying!"
+        , "Failure":"The horse is a wild stallion that almost kicks you with her hind legs. You narrowly escape to continue on your journey"
+        , "Magic":2
+        , "Continue": 1
+      }
   ]
   ,"StartingPlace": "You are in your bedroom when you hear a loud noise. You look up to see a door in the wall of your closet that you have never seen before.\nWould you like to venture through the door?\nPress y then enter to continue"
   ,"Destinations": "In the distance to the north you can see a small village, to the east you can see a river and to the west a field of wild flowers."

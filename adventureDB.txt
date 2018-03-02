@@ -14,10 +14,10 @@
     , "There are gray clouds looming in the horizon."
   ]
   , "Enemies":[
-     "Ogre"
-    , "Giant"
-    , "Serpent"
-    , "Wolf"
+     "an Ogre"
+    , "a Giant"
+    , "a Serpent"
+    , "a Wolf"
   ]
   , "Trials": [
       {
@@ -44,8 +44,25 @@
   ]
   ,"StartingPlace": "You are in your bedroom when you hear a loud noise. You look up to see a door in the wall of your closet that you have never seen before.\nPress y then to travel through the door."
   ,"Destinations": "In the distance to the north you can see a small village, to the east you can see a river and to the west a field of wild flowers."
-  , "North": "You move to the north, walking in the sunshine."
+  , "North": "You move to the north, walking in the sunshine toward the village."
   , "East": "You walk to the river which lies to the east of your home."
   , "West": "You walk to the field of wild flowers, stopping to take in the beauty"
+  , "Dest":[
+    {
+      "Direction": "north"
+      , "Place": "a small village"
+      , "Chosen": "You move to the north, walking in the sunshine toward the village.
+    }
+    ,{
+       "Direction": "east"
+       , "Place": "a charming castle"
+       , "Chosen": "You walk to the castle which lies to the east of your home."
+    }
+    ,{
+      "Direction": "west"
+      , "Place": "a field of wild flowers"
+      , "Chosen": "You walk to the field of wild flowers, stopping to take in the beauty"
+    }
+  ]
   }
 }

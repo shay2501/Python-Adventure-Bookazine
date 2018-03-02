@@ -48,11 +48,14 @@ def choose_direction():
     print()
     move = input("Which direction would you like to travel?\n")
     if move == 'n':
+        print()
         print (datastore["adventure"]["North"])
     #elif is short for Else If and it means that if the previous condition is false, to check this condition to see if that is true.
     elif move == 'e':
+        print()
         print (datastore["adventure"]["East"])
     elif move == 'w':
+        print()
         print (datastore["adventure"]["West"])
 
 def carry_on():
@@ -63,8 +66,7 @@ def carry_on():
     if hitpts <= 0:
         carryon = False
         print("I am sorry hero, but all your health is spent!\nRest up and try again another time\n")
-    elif len(datastore["adventure"]["NPCNames"]) == 0 and len(datastore["adventure"]["Enemies"]) == 0
-        and len(datastore["adventure"]["Trials"]) == 0:
+    elif len(datastore["adventure"]["NPCNames"]) == 0 and len(datastore["adventure"]["Enemies"]) == 0 and len(datastore["adventure"]["Trials"]) == 0:
         carryon = False
         print("You have battled all your enemies, encountered all your friends, faced all your trials, and lived to tell the tale!")
         print(name + ", you are the bravest hero in all of " + datastore["adventure"]["Kingdom"] + "!!!")
@@ -108,7 +110,7 @@ def friend():
     if input() == "y":
         print ("["+npcname+":] " +responses.pop() + "\n")
         bonus = randint(5,20)
-        print("Your friend gives you " + str(bonus) + " health points")
+        print("Your friend gives you " + str(bonus) + " health")
         hitpts += bonus
         print_stats()
         print()
@@ -128,31 +130,32 @@ def enemy():
     shuffle(enemies)
     enemyname = enemies.pop()
     print("")
-    print ("Suddenly you hear a commotion, and from the shadows you see a/an "+enemyname+" coming straight at you....")
+    print ("Suddenly you hear a commotion, and from the shadows you see "+ enemyname +" coming straight at you....")
     #print enemyname
     print("")
-    print ("Your enemy has " + " " + str(enemyhitpts) + " " + "Health Points")
-    print ("Your enemy has " + " " + str(enemymagicpts) + " " + "Magic Points")
+    print ("Your enemy has " + " " + str(enemyhitpts) + " " + "Health")
+    print ("Your enemy has " + " " + str(enemymagicpts) + " " + "Magic Power")
     print("")
 
 def trial():
     global carryon
     global magicpts
 
-    print('Trial')
     trials = datastore["adventure"]["Trials"]
     trial = trials.pop()
     print(trial["Trial"])
     if input() == "y":
         success = randint(0, 100)%2
         if(success == 1):
-            print(trial["Success"])
-            print("You have gained " + str(trial["Magic"]) + " magic points for your trial.")
             print()
+            print(trial["Success"])
+            print("You have gained " + str(trial["Magic"]) + " magic for your trial.")
             magicpts += trial["Magic"]
             carryon = True
+            print()
             print_stats()
         else:
+            print()
             print(trial["Failure"])
             print()
             carryon = bool(trial["Continue"])
@@ -167,11 +170,11 @@ def fight_enemy():
     #The hero takes damage from the enemy but also causes damage, if she brought her sword
     hit = randint(0,magicpts)
     print()
-    print ("You swing your sword and cause " + str(hit) + " of damage")
+    print ("You swing your sword and cause " + str(hit) + " damage")
     enemyhitpts -= hit
     print("Your enemy's hitpts = " + str(enemyhitpts))
     enemyhit = randint(0,enemymagicpts)
-    print ("The " + enemyname + " swings a weapon at you and causes " + str(enemyhit) + " of damage")
+    print ("The " + enemyname + " swings a weapon at you and causes " + str(enemyhit) + " damage")
     hitpts -= enemyhit
     print_stats()
 
@@ -196,7 +199,7 @@ def run_away():
 def print_stats():
     global magicpts
     global hitpts
-    print("You have " + str(hitpts) + " Health Points and " + str(magicpts) + " Magic Points\n")
+    print("You have " + str(hitpts) + " Health and " + str(magicpts) + " Magic Power\n")
 
 def game_over():
     global carryon
@@ -233,7 +236,6 @@ sleep(2)
 print ()
 print (datastore["adventure"]["StartingPlace"])
 
-print ()
 #Below we use input to ask for user input, and if it is equal to y, then the code underneath is run.
 if input() == "y":
     print()
@@ -250,12 +252,20 @@ if input() == "y":
         print ("You choose not to take your weapons")
     print ("You are ready to venture out into the land!")
 else:
+    print()
     print ("Nothing ventured, nothing gained!\nThe land of " + datastore["adventure"]["Kingdom"] + " is missing a hero.")
     game_over()
     sys.exit(0)
 
 print()
-print (datastore["adventure"]["Destinations"])
+#print (datastore["adventure"]["Destinations"])
+print("In the distance ", end="")
+directions = datastore["adventure"]["Dest"]
+for destination in directions:
+    print(" to the ", end=""))
+    print(destination["Direction"], end="")
+    print( " you can see ", end="")
+    print(destination["Place"] + ", ", end="")
 
 #prompt the hero for a direction
 print ()

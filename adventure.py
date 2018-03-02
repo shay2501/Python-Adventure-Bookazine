@@ -45,7 +45,8 @@ def choose_direction():
     print ("To go north press n then enter")
     print ("To go east press e then enter")
     print ("To go west press w then enter")
-    move = input("Which direction would you like to travel? ")
+    print()
+    move = input("Which direction would you like to travel?\n")
     if move == 'n':
         print (datastore["adventure"]["North"])
     #elif is short for Else If and it means that if the previous condition is false, to check this condition to see if that is true.
@@ -62,7 +63,8 @@ def carry_on():
     if hitpts <= 0:
         carryon = False
         print("I am sorry hero, but all your health is spent!\nRest up and try again another time\n")
-    elif len(datastore["adventure"]["NPCNames"]) == 0 and len(datastore["adventure"]["Enemies"]) == 0:
+    elif len(datastore["adventure"]["NPCNames"]) == 0 and len(datastore["adventure"]["Enemies"]) == 0
+        and len(datastore["adventure"]["Trials"]) == 0:
         carryon = False
         print("You have battled all your enemies, encountered all your friends, faced all your trials, and lived to tell the tale!")
         print(name + ", you are the bravest hero in all of " + datastore["adventure"]["Kingdom"] + "!!!")
@@ -92,6 +94,8 @@ def friend():
     #This will create a randomly named Friend to interact with
     global npcname
     global response
+    global hitpts
+
     #Below is a list, we can store lots of things in a list and then retrieve them later.
     responses = datastore["adventure"]["NPCResponses"]
     npcnamechoice = datastore["adventure"]["NPCNames"]
@@ -118,12 +122,13 @@ def enemy():
     global enemyname
     enemyhitpts = randint(5,20)
     enemymagicpts = randint(5,20)
+
     #Below is the enemy's name, perhaps you could change this to a list and then shuffle the list, such as we did for the villager above.
     enemies = datastore["adventure"]["Enemies"]
     shuffle(enemies)
     enemyname = enemies.pop()
     print("")
-    print ("Suddenly you hear a commotion, and from the shadows you see an "+enemyname+" coming straight at you....")
+    print ("Suddenly you hear a commotion, and from the shadows you see a/an "+enemyname+" coming straight at you....")
     #print enemyname
     print("")
     print ("Your enemy has " + " " + str(enemyhitpts) + " " + "Health Points")
@@ -144,7 +149,7 @@ def trial():
             print(trial["Success"])
             print("You have gained " + str(trial["Magic"]) + " magic points for your trial.")
             print()
-            magicpts = magicpts + trial["Magic"]
+            magicpts += trial["Magic"]
             carryon = True
             print_stats()
         else:
@@ -161,12 +166,13 @@ def fight_enemy():
 
     #The hero takes damage from the enemy but also causes damage, if she brought her sword
     hit = randint(0,magicpts)
+    print()
     print ("You swing your sword and cause " + str(hit) + " of damage")
-    enemyhitpts = enemyhitpts - hit
+    enemyhitpts -= hit
     print("Your enemy's hitpts = " + str(enemyhitpts))
     enemyhit = randint(0,enemymagicpts)
     print ("The " + enemyname + " swings a weapon at you and causes " + str(enemyhit) + " of damage")
-    hitpts = hitpts - enemyhit
+    hitpts -= enemyhit
     print_stats()
 
 def run_away():
@@ -174,6 +180,7 @@ def run_away():
     global enemymagicpts
     global hitpts
 
+    print()
     print ("You turn and run away from the " + enemyname)
     #the hero suffers damage if caught
     suffer = randint(0, 100)%2
@@ -182,14 +189,14 @@ def run_away():
     else:
         enemyhit = randint(0,enemymagicpts)
         print("You are caught by the enemy and suffer " + str(enemyhit) + " points of damage")
-        hitpts = hitpts - enemyhit
+        hitpts -= enemyhit
 
     print_stats()
 
 def print_stats():
     global magicpts
     global hitpts
-    print("You now have " + str(hitpts) + " Health Points and " + str(magicpts) + " Magic Points\n")
+    print("You have " + str(hitpts) + " Health Points and " + str(magicpts) + " Magic Points\n")
 
 def game_over():
     global carryon
@@ -216,39 +223,44 @@ global move
 global enemyhitpts
 global datastore
 print ("Welcome to the land of " + datastore["adventure"]["Kingdom"] + ", "  + name)
+print()
 #Sleep is Python's way of pausing the game for a specified number of seconds
 sleep(2)
 #Below we are using the helper functions to join a string of text to an integer via the str() helper.
-print ("\nYour health is" + " " + str(hitpts))
+print ("Your health is" + " " + str(hitpts))
 print ("Your magic skill is" + " " + str(magicpts))
 sleep(2)
-print ("")
+print ()
 print (datastore["adventure"]["StartingPlace"])
 
-print ("")
+print ()
 #Below we use input to ask for user input, and if it is equal to y, then the code underneath is run.
 if input() == "y":
-
+    print()
     print ("Would you like to take your sword and shield?\nPress y then enter to continue")
     if input() == "y":
         #This is a list, and it can store many items, and to do that we "append" items to the list.
         weapons = []
         weapons.append("sword")
         weapons.append("shield")
+        print()
         print ("You are now carrying your " + weapons[0] + " and your" + " " + weapons[1])
     else:
+        print()
         print ("You choose not to take your weapons")
     print ("You are ready to venture out into the land!")
 else:
-    print ("\nNothing ventured, nothing gained!\nThe land of " + datastore["adventure"]["Kingdom"] + " is missing a hero.")
+    print ("Nothing ventured, nothing gained!\nThe land of " + datastore["adventure"]["Kingdom"] + " is missing a hero.")
     game_over()
     sys.exit(0)
 
+print()
 print (datastore["adventure"]["Destinations"])
 
 #prompt the hero for a direction
-print ("\n")
+print ()
 choose_direction()
+print()
 
 #main game loops until we are out of enemy's and friends, or out of places to go
 while carry_on():
@@ -268,7 +280,7 @@ while carry_on():
     elif len(datastore["adventure"]["Enemies"])> 0:
         enemy()
         print_stats()
-        fight = input("Do you wish to fight?" )
+        fight = input("Do you wish to fight?\n")
 
         if fight == "y":
             fight_enemy()
@@ -282,20 +294,20 @@ print()
 game_over()
 print()
 
-print ("   _       _                 _")
-print ("  /_\   __| |_   _____ _ __ | |_ _   _ _ __ ___")
-print (" //_\\ / _` \ \ / / _ \ '_ \| __| | | | '__/ _ \ ")
-print ("/  _  \ (_| |\ V /  __/ | | | |_| |_| | | |  __/")
-print ("\_/ \_/\__,_| \_/ \___|_| |_|\__|\__,_|_|  \___|")
-
-print ("                     _ _")
-print ("  __ ___      ____ _(_) |_ ___")
-print (" / _` \ \ /\ / / _` | | __/ __|")
-print ("| (_| |\ V  V / (_| | | |_\__ \ ")
-print (" \__,_| \_/\_/ \__,_|_|\__|___/")
-
-print (" _   _  ___  _   _")
-print ("| | | |/ _ \| | | |")
-print ("| |_| | (_) | |_| |")
-print (" \__, |\___/ \__,_|")
-print (" |___/")
+# print ("   _       _                 _")
+# print ("  /_\   __| |_   _____ _ __ | |_ _   _ _ __ ___")
+# print (" //_\\ / _` \ \ / / _ \ '_ \| __| | | | '__/ _ \ ")
+# print ("/  _  \ (_| |\ V /  __/ | | | |_| |_| | | |  __/")
+# print ("\_/ \_/\__,_| \_/ \___|_| |_|\__|\__,_|_|  \___|")
+#
+# print ("                     _ _")
+# print ("  __ ___      ____ _(_) |_ ___")
+# print (" / _` \ \ /\ / / _` | | __/ __|")
+# print ("| (_| |\ V  V / (_| | | |_\__ \ ")
+# print (" \__,_| \_/\_/ \__,_|_|\__|___/")
+#
+# print (" _   _  ___  _   _")
+# print ("| | | |/ _ \| | | |")
+# print ("| |_| | (_) | |_| |")
+# print (" \__, |\___/ \__,_|")
+# print (" |___/")

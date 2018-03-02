@@ -262,7 +262,7 @@ print()
 print("In the distance ", end="")
 directions = datastore["adventure"]["Dest"]
 for destination in directions:
-    print(" to the ", end=""))
+    print(" to the ", end="")
     print(destination["Direction"], end="")
     print( " you can see ", end="")
     print(destination["Place"] + ", ", end="")

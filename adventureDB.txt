@@ -51,7 +51,7 @@
     {
       "Direction": "north"
       , "Place": "a small village"
-      , "Chosen": "You move to the north, walking in the sunshine toward the village.
+      , "Chosen": "You move to the north, walking in the sunshine toward the village."
     }
     ,{
        "Direction": "east"
